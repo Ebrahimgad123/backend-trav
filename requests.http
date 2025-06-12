@@ -1,0 +1,22 @@
+### Signup
+###
+POST http://localhost:3000/api/auth/signup
+Content-Type: application/json
+
+{
+    "name": "Ahmed Mohamed",
+    "email": "ahmed128@example.com",
+    "password": "12345678",
+    "phone": "01234567890",
+    "profileImage":"https://s3-figma-plugin-images-production-sig.figma.com/plugins/carousel/img/1164118094004004837/1b119bd57c4e157c09366371efd143558a659a15?Expires=1749427200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=pd~OM4IgxPKEDvqLWLgPsqM32qgqzkVRBA9Q8dlmPtnx5xZmFoTds3xG2mogl3Dto3I5RxgV6T1igNp80QwR6bKbhWN7DfcvfEHfgqUpA00GHvdgMvsfcp8scp1YR1-UnUc-hGeWuFJ-A0ra-VWx7uF1gnvF0JwLmD-grfYrfLQA1LGsjrneEwRT~s3bX8cYKtC63RU4Ov~79m-NkwRABUNKfSgzGLHwmnOgEMOOLMiEnMPwdT5SEgfQ-waMLqkKHmLkxL~CTl31QNgXnA79qjK1GxcJ8Il~NhunGuxYTN5G~MQQ7horyBD42KLpEa2okXE82DJNaNYkGU4P1WCAdA__"
+}
+###
+### Login
+
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "ahmed@example.com",
+    "password": "12345678"
+}

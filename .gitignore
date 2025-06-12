@@ -1,0 +1,45 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.test.local
+.env.production.local
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Coverage and test reports
+coverage/
+nyc_output/
+
+# Build artifacts (لو فيه أي نوع من التحويل أو النسخ)
+dist/
+build/
+
+# TypeScript (لو المشروع TypeScript)
+*.tsbuildinfo
+
+# PM2 logs (لو بتستخدم PM2)
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Optional: Mac/Linux swap files
+*.swp
