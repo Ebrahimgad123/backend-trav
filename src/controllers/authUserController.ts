@@ -63,7 +63,7 @@ export const signup = async (req: MulterRequest, res: Response, next: NextFuncti
 
     // Add profile image if uploaded
     if (req.file) {
-      userData.profileImage = req.file.filename;
+      userData.profileImage = `http://localhost:5000/uploads/${req.file.filename}`
     }
 
     const newUser = await User.create(userData);

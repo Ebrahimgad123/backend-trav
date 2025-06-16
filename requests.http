@@ -13,10 +13,92 @@ Content-Type: application/json
 ###
 ### Login
 
-POST http://localhost:3000/api/auth/login
+POST http://localhost:5000/auth/auth/login
 Content-Type: application/json
 
 {
     "email": "ahmed@example.com",
     "password": "12345678"
+}
+###
+/// create Place
+POST http://localhost:5000/place
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Mzg0ZDllNTQ5OTJiMzExZmZhZGYzYSIsImlhdCI6MTc0OTk4NzI3OCwiZXhwIjoxNzU3NzYzMjc4fQ.ecGvJyVTkrIXRPIK1uI0gku4iP6R256-C01c4NXjQKY
+
+{
+  "name": "Pyramids of Giza",
+  "city": "Giza",
+  "description": "The last remaining wonder of the ancient world.",
+  "images": [
+    "https://example.com/pyramids1.jpg",
+    "https://example.com/pyramids2.jpg"
+  ],
+  "category": "Historical",
+  "price": 100,
+  "location": {
+    "type": "Point",
+    "coordinates": [31.1342, 29.9792]
+  }
+}
+
+###
+// create trip
+POST http://localhost:5000/trip/createTrip
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Mzg0ZDllNTQ5OTJiMzExZmZhZGYzYSIsImlhdCI6MTc1MDAwODgyNywiZXhwIjoxNzU3Nzg0ODI3fQ.sH8JjngtdL8hQlfLss6kUm8JRu3iLL79CckZWFv7vyU
+
+{
+  "selectedPlaces": [
+    "684a601557826106ff05a799",
+    "684a601557826106ff05a79a",
+    "684a601557826106ff05a79b"
+  ]
+}
+###
+  // get my trips
+GET http://localhost:5000/trip/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Mzg0ZDllNTQ5OTJiMzExZmZhZGYzYSIsImlhdCI6MTc1MDAwODgyNywiZXhwIjoxNzU3Nzg0ODI3fQ.sH8JjngtdL8hQlfLss6kUm8JRu3iLL79CckZWFv7vyU
+
+
+### Search places by name and city
+GET http://localhost:5000/places/searchPlace?name=pyramid
+Content-Type: application/json
+
+###
+
+### Search places by category only
+GET http://localhost:5000/places/searchPlace?name=pyramid&city=Giza
+Content-Type: application/json
+###
+
+### Search all places (بدون فلاتر)
+GET http://localhost:5000/places/searchPlace
+Content-Type: application/json
+
+### Create new driver (admin only)
+POST http://localhost:5000/driver
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Mzg0ZDllNTQ5OTJiMzExZmZhZGYzYSIsImlhdCI6MTc1MDAwODgyNywiZXhwIjoxNzU3Nzg0ODI3fQ.sH8JjngtdL8hQlfLss6kUm8JRu3iLL79CckZWFv7vyU
+
+{
+  "name": "Mohamed Driver",
+  "phone": "01123456789",
+  "hasCar": true,
+  "carType": "Toyota Corolla",
+  "pricePerHour": 150,
+  "profileImage": "https://example.com/driver.jpg",
+  "isAvailable": true
+}
+
+### Create new review for a place (user only)
+POST http://localhost:5000/review
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Mzg0ZDllNTQ5OTJiMzExZmZhZGYzYSIsImlhdCI6MTc1MDAwODgyNywiZXhwIjoxNzU3Nzg0ODI3fQ.sH8JjngtdL8hQlfLss6kUm8JRu3iLL79CckZWFv7vyU
+
+{
+  "placeId": "684a601557826106ff05a799",
+  "rating": 5,
+  "comment": "Amazing place, highly recommended!"
 }

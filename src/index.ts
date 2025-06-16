@@ -13,7 +13,7 @@ import driverRoutes from './routes/driverRoutes';
 import userRoutes from './routes/userRoutes';
 import driverReviewRoutes from './routes/driverReviewRoutes';
 import notificationRoutes from './routes/notificationRoutes';
-// ...existing code...
+import paymentRoutes from './routes/payment';
 import googleAuthRoutes from './routes/googleAuthRoutes';
 import session from 'express-session';
 import passport from './middleware/passport';
@@ -51,16 +51,16 @@ app.get('/', (_req, res) => {
 });
 
 // Routes
-app.use('/', googleAuthRoutes);
-app.use('/', authRoutes);
-app.use('/', placeRoutes);
-app.use('/', reviewRoutes);
+app.use('/google', googleAuthRoutes);
+app.use('/auth', authRoutes);
+app.use('/places', placeRoutes);
+app.use('/review', reviewRoutes);
 app.use('/trip', tripRoutes);
-app.use('/', driverRoutes);
-app.use('/', userRoutes);
-app.use('/', driverReviewRoutes);
-app.use('/', notificationRoutes);
-
+app.use('/driver', driverRoutes);
+app.use('/user', userRoutes);
+app.use('/driverReview', driverReviewRoutes);
+app.use('/notification', notificationRoutes);
+app.use('/payment', paymentRoutes);
 // ...existing code...
 // Handle undefined routes
 app.all('*', (_req, _res, next) => {

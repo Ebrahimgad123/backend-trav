@@ -13,7 +13,7 @@ const tripSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Trip must belong to a user'],
+    
   },
   selectedPlaces: [{
     type: Schema.Types.ObjectId,

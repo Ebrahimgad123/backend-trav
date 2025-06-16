@@ -16,7 +16,7 @@ const router = express.Router();
 // Public routes
 router.get('/place', getAllPlaces);
 router.get('/searchPlace', searchPlaces);
-router.get('/:id', getPlace);
+router.get('place/:id', getPlace);
 
 // Protected routes
 router.use(protect);

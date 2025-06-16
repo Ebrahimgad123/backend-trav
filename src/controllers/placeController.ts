@@ -7,13 +7,13 @@ export const getAllPlaces = async (_req: Request,res: Response,next: NextFunctio
   try {
     const places = await Place.find();
 
-    res.status(200).json({
+    res.json({
       status: 'success',
       results: places.length,
       data: {
         places,
       },
-    });
+    })
   } catch (error) {
     next(error);
   }
@@ -99,20 +99,17 @@ export const deletePlace = async (req: Request,res: Response,next: NextFunction)
 };
 
 // Search places
-export const searchPlaces = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+
+export const searchPlaces = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { query } = req.query;
-    const places = await Place.find({
-      $or: [
-        { name: { $regex: query, $options: 'i' } },
-        { city: { $regex: query, $options: 'i' } },
-        { description: { $regex: query, $options: 'i' } },
-      ],
-    });
+    const { name, city, category } = req.query;
+    const query: any = {};
+
+    if (name) query.name = { $regex: name, $options: 'i' };
+    if (city) query.city = { $regex: city, $options: 'i' };
+    if (category) query.category = { $regex: category, $options: 'i' };
+
+    const places = await Place.find(query);
 
     res.status(200).json({
       status: 'success',
@@ -124,4 +121,4 @@ export const searchPlaces = async (
   } catch (error) {
     next(error);
   }
-}; 
+};

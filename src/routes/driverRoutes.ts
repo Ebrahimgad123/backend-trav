@@ -15,14 +15,14 @@ const router = express.Router();
 router.use(protect);
 
 // Public routes
-router.get('/', getAllDrivers);
+router.get('/getAll', getAllDrivers);
 router.get('/:id', getDriver);
 
 // Driver specific routes
 router.patch('/availability', restrictTo('driver'), updateAvailability);
 
 // Admin only routes
-router.use(restrictTo('admin'));
+router.use(restrictTo('driver', 'admin'));
 router.post('/', createDriver);
 router.patch('/:id', updateDriver);
 router.delete('/:id', deleteDriver);

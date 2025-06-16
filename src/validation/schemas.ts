@@ -14,7 +14,7 @@ export const createUserSchema = Joi.object({
   name: Joi.string().required().min(2).max(50),
   email: Joi.string().required().email(),
   password: Joi.string().required().min(8),
-  phone: Joi.string().required().pattern(/^[0-9]{10,}$/),
+  phone: Joi.string().pattern(/^[0-9]{10,}$/),
   role: Joi.string().valid('user', 'guide', 'admin').default('user'),
 });
 export const loginUserSchema = Joi.object({
@@ -59,14 +59,16 @@ export const updatePlaceSchema = Joi.object({
 }).min(1);
 
 // Trip Validation Schemas
+
 export const createTripSchema = Joi.object({
-  userId: objectId.required(),
+  userId: objectId.optional(), // يمكن جعله اختياري (سيؤخذ من التوكن)
   selectedPlaces: Joi.array().items(objectId).min(1).required(),
   driverId: objectId,
-  totalCost: Joi.number().required().greater(0),
-  expectedTime: Joi.string().required().pattern(/^(\d+h\s*)?(\d+m)?$/),
+  totalCost: Joi.number().greater(0).optional(), // <-- اجعله اختياري
+  expectedTime: Joi.string().pattern(/^(\d+h\s*)?(\d+m)?$/).optional(), // <-- اجعله اختياري
   status: Joi.string().valid('pending', 'confirmed', 'completed', 'cancelled').default('pending'),
 });
+
 
 export const updateTripSchema = Joi.object({
   selectedPlaces: Joi.array().items(objectId).min(1),

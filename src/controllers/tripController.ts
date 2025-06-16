@@ -3,6 +3,7 @@ import { Trip } from '../models/Trip';
 import { AppError } from '../middleware/error';
 import { IUser } from '../models/User';
 import { NotificationService } from '../services/notificationService';
+import { Place } from '../models/Place';
 
 interface AuthRequest extends Request {
   user?: IUser;
@@ -29,11 +30,7 @@ export const getAllTrips = async (_req: Request,res: Response,next: NextFunction
 };
 
 // Get trip by ID
-export const getTrip = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const getTrip = async ( req: AuthRequest,res: Response,next: NextFunction): Promise<void> => {
   try {
     const trip = await Trip.findById(req.params.id)
       .populate('userId', 'name email')
@@ -46,9 +43,9 @@ export const getTrip = async (
 
     // Check if user has permission to view this trip
     if (
-      trip.userId.toString() !== req.user?._id.toString() &&
+      trip.userId !== req.user?._id &&
       req.user?.role !== 'admin' &&
-      trip.driverId?.toString() !== req.user?._id.toString()
+      trip.driverId !== req.user?._id
     ) {
       throw new AppError('You do not have permission to view this trip', 403);
     }
@@ -65,32 +62,59 @@ export const getTrip = async (
 };
 
 // Create new trip
-export const createTrip = async (req: AuthRequest,res: Response,next: NextFunction): Promise<void> => {
+export const createTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new AppError('You must be logged in to create a trip', 401);
+    if (!req.user) throw new AppError('You must be logged in to create a trip', 401);
+         console.log("userid",req.user.id)
+    const selectedPlaces = req.body.selectedPlaces; // IDs للأماكن المختارة
+
+    if (!selectedPlaces || selectedPlaces.length === 0) {
+      throw new AppError('You must select at least one place', 400);
     }
 
-    const newTrip = await Trip.create({
-      ...req.body,
+    // ✅ تحقق هل لدى المستخدم رحلة بنفس الأماكن (ولم تُكمل بعد)
+    const existingTrip = await Trip.findOne({
       userId: req.user._id,
-      status: 'pending',
+      selectedPlaces: { $all: selectedPlaces, $size: selectedPlaces.length },
+      status: { $nin: ['completed', 'cancelled'] } // فقط إذا لم تكتمل أو تلغى
     });
 
-    const trip = await Trip.findById(newTrip._id)
-      .populate('selectedPlaces', 'name city')
-      .populate('driverId', 'name phone carType');
+    if (existingTrip) {
+      throw new AppError('You already have a trip with the same selected places.', 400);
+    }
+
+    // احسب التكلفة والوقت
+    const places = await Place.find({ _id: { $in: selectedPlaces } });
+
+    const basePrice = 10;
+    const pricePerPlace = 20;
+    const timePerPlaceMinutes = 30;
+
+    const totalCost = basePrice + (places.length * pricePerPlace);
+    const totalMinutes = places.length * timePerPlaceMinutes;
+    const expectedTime = `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60}m`;
+     
+    // أنشئ الرحلة
+    const newTrip = await Trip.create({
+      userId: req.user.id,
+      selectedPlaces,
+      totalCost,
+      expectedTime,
+      status: 'pending'
+    });
 
     res.status(201).json({
       status: 'success',
       data: {
-        trip,
-      },
+        trip: newTrip
+      }
     });
+
   } catch (error) {
     next(error);
   }
 };
+
 
 // Update trip
 export const updateTrip = async (req: AuthRequest,res: Response,next: NextFunction): Promise<void> => {

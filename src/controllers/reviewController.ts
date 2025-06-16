@@ -3,11 +3,7 @@ import { Review } from '../models/Review';
 import { AppError } from '../middleware/error';
 
 // Get all reviews
-export const getAllReviews = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const getAllReviews = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     let filter = {};
     if (req.params.placeId) filter = { placeId: req.params.placeId };

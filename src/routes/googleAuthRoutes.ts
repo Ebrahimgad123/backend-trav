@@ -10,7 +10,7 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (_req, res) => {
-    res.redirect('https://front-graduation.vercel.app/getlocation');
+    res.redirect('http://localhost:3000/getlocation');
   }
 );
 

@@ -9,6 +9,8 @@ export interface IPlace extends Document {
   category: string;
   price: number;
   location: {
+    lng: number;
+    lat: number;
     type: string;
     coordinates: number[];
   };

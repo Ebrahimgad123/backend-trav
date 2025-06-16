@@ -11,7 +11,7 @@ router.post('/signup',uploadSingleImage('profileImage'),
   validate(createUserSchema),
   signup
 );
-router.post('/login',validate(loginUserSchema), login);
+router.post('/auth/login',validate(loginUserSchema), login);
 router.get('/me', protect, getMe);
 
 export default router; 
