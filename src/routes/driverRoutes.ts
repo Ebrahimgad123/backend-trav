@@ -8,6 +8,7 @@ import {
   deleteDriver,
   updateAvailability
 } from '../controllers/driverController';
+import { uploadSingleImage } from '../middleware/upload';
 
 const router = express.Router();
 
@@ -22,8 +23,8 @@ router.get('/:id', getDriver);
 router.patch('/availability', restrictTo('driver'), updateAvailability);
 
 // Admin only routes
-router.use(restrictTo('driver', 'admin'));
-router.post('/', createDriver);
+router.use(restrictTo('driver', 'admin',"user"));
+router.post('/',uploadSingleImage("profileImage"), createDriver);
 router.patch('/:id', updateDriver);
 router.delete('/:id', deleteDriver);
 

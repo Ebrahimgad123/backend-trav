@@ -132,7 +132,7 @@ export const updateTrip = async (req: AuthRequest,res: Response,next: NextFuncti
     // Check permissions based on user role and trip status
     if (req.user.role === 'admin') {
       // Admin can update any trip
-    } else if (req.user.role === 'driver' && trip.driverId?.toString() === req.user._id.toString()) {
+    } else if (req.user.role === 'driver' && trip.driverId?.toString() === req.user.id.toString()) {
       // Driver can only update their assigned trips and only the status
       if (Object.keys(req.body).some(key => key !== 'status')) {
         throw new AppError('Drivers can only update trip status', 403);
@@ -166,11 +166,7 @@ export const updateTrip = async (req: AuthRequest,res: Response,next: NextFuncti
 };
 
 // Delete trip
-export const deleteTrip = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const deleteTrip = async (req: AuthRequest,res: Response,next: NextFunction): Promise<void> => {
   try {
     if (!req.user) {
       throw new AppError('You must be logged in to delete a trip', 401);

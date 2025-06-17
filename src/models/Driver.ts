@@ -53,6 +53,11 @@ const driverSchema = new Schema({
   isAvailable: {
     type: Boolean,
     default: true,
+  },
+  role : {
+    type: String,
+    enum: ['driver', 'admin', 'user'],
+    default: 'driver',
   }
 }, {
   timestamps: true,

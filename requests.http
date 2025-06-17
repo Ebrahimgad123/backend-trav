@@ -83,11 +83,11 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Mzg0ZDllNTQ5OTJiMzExZmZhZGYzYSIsImlhdCI6MTc1MDAwODgyNywiZXhwIjoxNzU3Nzg0ODI3fQ.sH8JjngtdL8hQlfLss6kUm8JRu3iLL79CckZWFv7vyU
 
 {
-  "name": "Mohamed Driver",
-  "phone": "01123456789",
+  "name": "samir Driver",
+  "phone": "0123950709",
   "hasCar": true,
-  "carType": "Toyota Corolla",
-  "pricePerHour": 150,
+  "carType": "mercedes benz",
+  "pricePerHour": 180,
   "profileImage": "https://example.com/driver.jpg",
   "isAvailable": true
 }

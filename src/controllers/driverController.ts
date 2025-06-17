@@ -41,17 +41,25 @@ export const getDriver = async (req: Request,res: Response,next: NextFunction): 
 };
 
 // Create a new driver
-export const createDriver = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const createDriver = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
-    const newDriver = await Driver.create(req.body);
+    // Check if the user is already a driver
+    const existingDriver = await Driver.findOne({ phone: req.body.phone });
+    if (existingDriver) {
+      throw new AppError('A driver with this phone number already exists', 400);
+    }
+     if (req.file) {
+      req.body.profileImage = req.file.filename; 
+    } 
+    const newDriver = await Driver.create({
+      ...req.body,
+      profileImage:`${"https://backend-trav.vercel.app"}/uploads/${req.file?.filename}`, 
+      role: 'driver',
+    });
 
     res.status(201).json({
       status: 'success',
-      data: {
+      data:{
         driver: newDriver
       }
     });
@@ -61,11 +69,7 @@ export const createDriver = async (
 };
 
 // Update a driver
-export const updateDriver = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const updateDriver = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const driver = await Driver.findByIdAndUpdate(req.params.id, req.body, {
       new: true,

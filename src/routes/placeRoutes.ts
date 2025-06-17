@@ -14,7 +14,7 @@ import {
 const router = express.Router();
 
 // Public routes
-router.get('/place', getAllPlaces);
+router.get('/getAllplaces', getAllPlaces);
 router.get('/searchPlace', searchPlaces);
 router.get('place/:id', getPlace);
 
