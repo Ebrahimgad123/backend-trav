@@ -1,9 +1,9 @@
 import express from 'express';
 import { protect } from '../middleware/auth';
-import { createCheckoutSession } from '../controllers/paymentController';
+import { createPaymentIntent } from '../controllers/paymentController';
 
 const router = express.Router();
 
-router.post('/checkout', protect, createCheckoutSession);
+router.post('/checkout', protect, createPaymentIntent);
 
 export default router;
