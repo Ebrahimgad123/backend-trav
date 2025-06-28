@@ -37,7 +37,7 @@ configSecurity(app);
 // Additional middleware
 app.use(morgan('dev'));
 app.use(express.json());
-
+app.use(express.static('public'));
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
@@ -63,7 +63,7 @@ app.use('/notification', notificationRoutes);
 app.use('/payment', paymentRoutes);
 // ...existing code...
 // Handle undefined routes
-app.all('*', (_req, _res, next) => {
+app.use('*', (_req, _res, next) => {
   next(new AppError('Route not found', 404));
 });
 

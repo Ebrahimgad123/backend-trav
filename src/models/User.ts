@@ -10,6 +10,7 @@ export interface IUser extends Document {
   active: boolean;
   favorites: mongoose.Types.ObjectId[];
   profileImage?: string;
+  isVerified:boolean;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -52,6 +53,7 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Place',
   }],
+   isVerified: { type: Boolean, default: false },
 }, {
   timestamps: true,
 });

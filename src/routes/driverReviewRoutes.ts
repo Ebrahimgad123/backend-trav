@@ -2,12 +2,7 @@ import express from 'express';
 import { protect } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { driverReviewValidation } from '../models/DriverReview';
-import {
-  createDriverReview,
-  getDriverReviews,
-  updateDriverReview,
-  deleteDriverReview
-} from '../controllers/driverReviewController';
+import {createDriverReview, getDriverReviews,updateDriverReview,deleteDriverReview} from '../controllers/driverReviewController';
 
 const router = express.Router();
 

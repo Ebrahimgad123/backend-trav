@@ -32,7 +32,7 @@ export const protect = async (req: Request,_res: Response,next: NextFunction) =>
       return next(new AppError('The user belonging to this token does no longer exist.', 401));
     }
 
-    // الحل الأفضل
+    
     req.user = {
       id: currentUser._id,
       role: currentUser.role
