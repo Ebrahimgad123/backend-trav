@@ -40,9 +40,14 @@ export const getPlace = async (req: Request,res: Response,next: NextFunction): P
 };
 
 // Create new place
-export const createPlace = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
+export const createPlace = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const newPlace = await Place.create(req.body);
+    const images = (req.files as Express.Multer.File[])?.map(file =>`${process.env.BACKEND_URL}/uploads/${file.filename}`);
+
+    const newPlace = await Place.create({
+      ...req.body,
+      images,
+    });
 
     res.status(201).json({
       status: 'success',
@@ -54,6 +59,7 @@ export const createPlace = async (req: Request,res: Response,next: NextFunction)
     next(error);
   }
 };
+
 
 // Update place
 export const updatePlace = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
@@ -105,7 +111,12 @@ export const searchPlaces = async (req: Request, res: Response, next: NextFuncti
     const { name, city, category } = req.query;
     const query: any = {};
 
-    if (name) query.name = { $regex: name, $options: 'i' };
+    if (name) {
+      query.$or = [
+        { name: { $regex: name, $options: 'i' } },
+        { description: { $regex: name, $options: 'i' } }
+      ];
+    }
     if (city) query.city = { $regex: city, $options: 'i' };
     if (category) query.category = { $regex: category, $options: 'i' };
 
