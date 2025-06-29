@@ -1,5 +1,7 @@
 import { Notification } from '../models/Notification';
 import { Types } from 'mongoose';
+import admin from '../config/firbase';
+import { User } from '../models/User';
 
 export class NotificationService {
   static async createNotification(data: {
@@ -9,7 +11,24 @@ export class NotificationService {
     type: 'trip' | 'review' | 'system';
     relatedId?: Types.ObjectId;
   }) {
-    return await Notification.create(data);
+    const notification = await Notification.create(data);
+
+    const user = await User.findById(data.userId);
+    if (user?.fcmToken) {
+      await admin.messaging().send({
+        token: user.fcmToken,
+        notification: {
+          title: data.title,
+          body: data.message,
+        },
+        data: {
+          type: data.type,
+          relatedId: data.relatedId?.toString() || '',
+        },
+      });
+    }
+
+    return notification;
   }
 
   static async getUserNotifications(userId: Types.ObjectId) {
@@ -63,3 +82,56 @@ export class NotificationService {
     });
   }
 } 
+
+
+// ⑤ React Native – إرسال الـ Token:
+// ts
+// Copy
+// Edit
+// // services/api.js
+// import axios from 'axios';
+
+// export const updateFcmToken = async (token) => {
+//   const res = await axios.patch('http://<your-api-url>/api/users/update-fcm-token', {
+//     fcmToken: token,
+//   }, {
+//     headers: {
+//       Authorization: `Bearer ${yourAuthToken}`,
+//     },
+//   });
+
+//   return res.data;
+// };
+// ts
+// Copy
+// Edit
+// // App.js or useEffect hook
+// import messaging from '@react-native-firebase/messaging';
+// import { updateFcmToken } from './services/api';
+
+// useEffect(() => {
+//   messaging()
+//     .getToken()
+//     .then(token => {
+//       updateFcmToken(token);
+//     });
+
+//   return messaging().onTokenRefresh(token => {
+//     updateFcmToken(token);
+//   });
+// }, []);
+// ✅ كده كل حاجة مربوطة:
+// المستخدم يرسل التوكن أول ما يفتح التطبيق.
+
+// السيرفر يحتفظ بالتوكن.
+
+// عند أي حدث (رحلة اتلغت، مراجعة جديدة)، السيرفر يرسل إشعار فعلي للموبايل مباشرة.
+
+// تحب أساعدك في:
+
+// إنشاء رسالة اختبارية (test push)?
+
+// استقبال الإشعار في React Native من onMessage؟
+
+// أو تصميم Notification UI؟
+// قلّي بس ❤️

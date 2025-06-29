@@ -106,4 +106,19 @@ export const deleteUser = async (
   }
 };
 
+export const updateFcmToken = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await User.findByIdAndUpdate(
+      req.user.id,
+      { fcmToken: req.body.fcmToken },
+      { new: true }
+    );
 
+    res.status(200).json({
+      status: 'success',
+      message: 'FCM token updated',
+    });
+  } catch (error) {
+    next(error);
+  }
+};

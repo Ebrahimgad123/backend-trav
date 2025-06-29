@@ -11,6 +11,7 @@ export interface IUser extends Document {
   favorites: mongoose.Types.ObjectId[];
   profileImage?: string;
   isVerified:boolean;
+  fcmToken: string;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -54,6 +55,7 @@ const userSchema = new Schema({
     ref: 'Place',
   }],
    isVerified: { type: Boolean, default: false },
+   fcmToken: { type: String, default: '' },
 }, {
   timestamps: true,
 });
