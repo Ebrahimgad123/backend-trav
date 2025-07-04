@@ -3,7 +3,6 @@ import { User } from '../models/User';
 import { AppError } from '../middleware/error';
 
 
-// Get all users (admin only)
 export const getAllUsers = async (
   _req: Request,
   res: Response,
@@ -24,7 +23,6 @@ export const getAllUsers = async (
   }
 };
 
-// Get user by ID (admin only)
 export const getUser = async (
   req: Request,
   res: Response,
@@ -49,14 +47,12 @@ export const getUser = async (
 };
 
 
-// Update user (admin only)
 export const updateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Don't allow password updates through this route
     if (req.body.password) {
       throw new AppError(
         'This route is not for password updates. Please use /updatePassword.',
@@ -84,7 +80,6 @@ export const updateUser = async (
   }
 };
 
-// Delete user (admin only)
 export const deleteUser = async (
   req: Request,
   res: Response,

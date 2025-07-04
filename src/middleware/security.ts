@@ -2,7 +2,6 @@ import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
-// @ts-ignore
 import xss from 'xss-clean';
 import { Express, json } from 'express';
 import hpp from 'hpp';

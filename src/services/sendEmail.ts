@@ -1,4 +1,3 @@
-// services/sendEmail.ts
 import nodemailer from "nodemailer";
 
 interface EmailOptions {

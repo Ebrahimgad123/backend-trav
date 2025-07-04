@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Place } from '../models/Place';
 import { AppError } from '../middleware/error';
 
-// Get all places
+
 export const getAllPlaces = async (_req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const places = await Place.find();
@@ -19,7 +19,6 @@ export const getAllPlaces = async (_req: Request,res: Response,next: NextFunctio
   }
 };
 
-// Get place by ID
 export const getPlace = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const place = await Place.findById(req.params.id).populate('reviews');
@@ -39,7 +38,7 @@ export const getPlace = async (req: Request,res: Response,next: NextFunction): P
   }
 };
 
-// Create new place
+
 export const createPlace = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const images = (req.files as Express.Multer.File[])?.map(file =>`${process.env.BACKEND_URL}/uploads/${file.filename}`);
@@ -61,7 +60,6 @@ export const createPlace = async (req: Request, res: Response, next: NextFunctio
 };
 
 
-// Update place
 export const updatePlace = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const place = await Place.findByIdAndUpdate(req.params.id, req.body, {
@@ -84,7 +82,6 @@ export const updatePlace = async (req: Request,res: Response,next: NextFunction)
   }
 };
 
-// Delete place
 export const deletePlace = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const place = await Place.findByIdAndDelete(req.params.id);
@@ -104,7 +101,6 @@ export const deletePlace = async (req: Request,res: Response,next: NextFunction)
   }
 };
 
-// Search places
 
 export const searchPlaces = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

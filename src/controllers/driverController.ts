@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { Driver } from '../models/Driver';
 import { AppError } from '../middleware/error';
+ 
 
-// Get all drivers
 export const getAllDrivers = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const filter = { ...req.query };
@@ -20,7 +20,7 @@ export const getAllDrivers = async (req: Request,res: Response,next: NextFunctio
   }
 };
 
-// Get a specific driver
+
 export const getDriver = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const driver = await Driver.findById(req.params.id);
@@ -40,10 +40,9 @@ export const getDriver = async (req: Request,res: Response,next: NextFunction): 
   }
 };
 
-// Create a new driver
+
 export const createDriver = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
-    // Check if the user is already a driver
     const existingDriver = await Driver.findOne({ phone: req.body.phone });
     if (existingDriver) {
       throw new AppError('A driver with this phone number already exists', 400);
@@ -68,7 +67,7 @@ export const createDriver = async (req: Request,res: Response,next: NextFunction
   }
 };
 
-// Update a driver
+
 export const updateDriver = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const driver = await Driver.findByIdAndUpdate(req.params.id, req.body, {
@@ -91,7 +90,7 @@ export const updateDriver = async (req: Request,res: Response,next: NextFunction
   }
 };
 
-// Delete a driver
+
 export const deleteDriver = async (
   req: Request,
   res: Response,
@@ -113,7 +112,7 @@ export const deleteDriver = async (
   }
 };
 
-// Update driver availability
+
 export const updateAvailability = async (
   req: Request,
   res: Response,

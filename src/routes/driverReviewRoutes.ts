@@ -6,7 +6,7 @@ import {createDriverReview, getDriverReviews,updateDriverReview,deleteDriverRevi
 
 const router = express.Router();
 
-router.use(protect); // All routes require authentication
+router.use(protect); 
 
 router
   .route('/')

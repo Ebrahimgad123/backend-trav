@@ -4,13 +4,8 @@ import { Trip } from '../models/Trip';
 import { AppError } from '../middleware/error';
 import { catchAsync } from '../utils/catchAsync';
 
-// Create a new driver review
-export const createDriverReview = catchAsync(async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  // Check if trip exists and belongs to user
+
+export const createDriverReview = catchAsync(async (req: Request,res: Response,next: NextFunction) => {
   const trip = await Trip.findOne({
     _id: req.body.tripId,
     userId: req.user.id,
@@ -21,7 +16,6 @@ export const createDriverReview = catchAsync(async (
     return next(new AppError('Trip not found or not completed', 404));
   }
 
-  // Check if review already exists
   const existingReview = await DriverReview.findOne({
     tripId: req.body.tripId,
     userId: req.user.id
@@ -43,7 +37,6 @@ export const createDriverReview = catchAsync(async (
   });
 });
 
-// Get all reviews for a driver
 export const getDriverReviews = catchAsync(async (
   req: Request,
   res: Response
@@ -59,7 +52,6 @@ export const getDriverReviews = catchAsync(async (
   });
 });
 
-// Update review
 export const updateDriverReview = catchAsync(async (
   req: Request,
   res: Response,
@@ -83,7 +75,7 @@ export const updateDriverReview = catchAsync(async (
   });
 });
 
-// Delete review
+
 export const deleteDriverReview = catchAsync(async (
   req: Request,
   res: Response,

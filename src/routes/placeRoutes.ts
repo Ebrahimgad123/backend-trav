@@ -15,37 +15,34 @@ import { parseJSONFields } from '../middleware/parseJsonFields'
 const router = express.Router();
 
 
-// ─── 🌍 Public Routes ────────────────────────────────────────────────
-router.get('/getAllplaces', getAllPlaces);          // Get all places
-router.get('/searchPlace', searchPlaces);           // Search places by keyword
-router.get('/place/:id', getPlace);                 // Get single place by ID
+router.get('/getAllplaces', getAllPlaces);    
+router.get('/searchPlace', searchPlaces);       
+router.get('/place/:id', getPlace);            
 
 
-// ─── 🔐 Protected Routes (Only for logged in users with roles: guide/admin) ──
-router.use(protect);                                // Protect all routes after this line
-router.use(restrictTo('guide', 'admin'));           // Allow only guides or admins
+router.use(protect);                                
+router.use(restrictTo('guide', 'admin'));         
 
 
-// ─── 🛠️ Admin-only Routes ─────────────────────────────────────────────
 router.post(
   '/create',
-  restrictTo('admin'),                               // Admin only
+  restrictTo('admin'),                             
   uploadMultipleImages('images'), 
-    parseJSONFields(['location']),                   // Upload images (max 5)
-  validate(createPlaceSchema),                       // Validate input
+    parseJSONFields(['location']),                   
+  validate(createPlaceSchema),                    
   createPlace
 );
 
 router.patch(
   '/:id',
-  restrictTo('admin'),                               // Admin only
-  validate(updatePlaceSchema),                       // Validate update input
+  restrictTo('admin'),                              
+  validate(updatePlaceSchema),                     
   updatePlace
 );
 
 router.delete(
   '/place/:id',
-  restrictTo('admin'),                               // Admin only
+  restrictTo('admin'),                              
   deletePlace
 );
 

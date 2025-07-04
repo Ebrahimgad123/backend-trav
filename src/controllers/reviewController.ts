@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { Review } from '../models/Review';
 import { AppError } from '../middleware/error';
 
-// Get all reviews
 export const getAllReviews = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     let filter = {};
@@ -22,7 +21,6 @@ export const getAllReviews = async (req: Request,res: Response,next: NextFunctio
   }
 };
 
-// Get a specific review
 export const getReview = async (
   req: Request,
   res: Response,
@@ -46,14 +44,12 @@ export const getReview = async (
   }
 };
 
-// Create a new review
 export const createReview = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Allow nested routes
     if (!req.body.placeId) req.body.placeId = req.params.placeId;
     if (!req.body.userId) req.body.userId = req.user.id;
 
@@ -70,7 +66,6 @@ export const createReview = async (
   }
 };
 
-// Update a review
 export const updateReview = async (
   req: Request,
   res: Response,
@@ -101,7 +96,7 @@ export const updateReview = async (
   }
 };
 
-// Delete a review
+
 export const deleteReview = async (
   req: Request,
   res: Response,

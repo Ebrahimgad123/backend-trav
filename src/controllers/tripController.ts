@@ -9,7 +9,6 @@ interface AuthRequest extends Request {
   user?: IUser;
 }
 
-// Get all trips (admin only)
 export const getAllTrips = async (_req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const trips = await Trip.find()
@@ -29,7 +28,6 @@ export const getAllTrips = async (_req: Request,res: Response,next: NextFunction
   }
 };
 
-// Get trip by ID
 export const getTrip = async ( req: AuthRequest,res: Response,next: NextFunction): Promise<void> => {
   try {
     const trip = await Trip.findById(req.params.id)
@@ -41,7 +39,6 @@ export const getTrip = async ( req: AuthRequest,res: Response,next: NextFunction
       throw new AppError('No trip found with that ID', 404);
     }
 
-    // Check if user has permission to view this trip
     if (
       trip.userId !== req.user?._id &&
       req.user?.role !== 'admin' &&
@@ -61,29 +58,26 @@ export const getTrip = async ( req: AuthRequest,res: Response,next: NextFunction
   }
 };
 
-// Create new trip
 export const createTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!req.user) throw new AppError('You must be logged in to create a trip', 401);
          console.log("userid",req.user.id)
-    const selectedPlaces = req.body.selectedPlaces; // IDs للأماكن المختارة
+    const selectedPlaces = req.body.selectedPlaces; 
 
     if (!selectedPlaces || selectedPlaces.length === 0) {
       throw new AppError('You must select at least one place', 400);
     }
 
-    // ✅ تحقق هل لدى المستخدم رحلة بنفس الأماكن (ولم تُكمل بعد)
     const existingTrip = await Trip.findOne({
       userId: req.user._id,
       selectedPlaces: { $all: selectedPlaces, $size: selectedPlaces.length },
-      status: { $nin: ['completed', 'cancelled'] } // فقط إذا لم تكتمل أو تلغى
+      status: { $nin: ['completed', 'cancelled'] } 
     });
 
     if (existingTrip) {
       throw new AppError('You already have a trip with the same selected places.', 400);
     }
 
-    // احسب التكلفة والوقت
     const places = await Place.find({ _id: { $in: selectedPlaces } });
 
     const basePrice = 10;
@@ -94,7 +88,6 @@ export const createTrip = async (req: AuthRequest, res: Response, next: NextFunc
     const totalMinutes = places.length * timePerPlaceMinutes;
     const expectedTime = `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60}m`;
      
-    // أنشئ الرحلة
     const newTrip = await Trip.create({
       userId: req.user.id,
       selectedPlaces,
@@ -116,7 +109,6 @@ export const createTrip = async (req: AuthRequest, res: Response, next: NextFunc
 };
 
 
-// Update trip
 export const updateTrip = async (req: AuthRequest,res: Response,next: NextFunction): Promise<void> => {
   try {
     if (!req.user) {
@@ -165,7 +157,7 @@ export const updateTrip = async (req: AuthRequest,res: Response,next: NextFuncti
   }
 };
 
-// Delete trip
+
 export const deleteTrip = async (req: AuthRequest,res: Response,next: NextFunction): Promise<void> => {
   try {
     if (!req.user) {
@@ -199,12 +191,7 @@ export const deleteTrip = async (req: AuthRequest,res: Response,next: NextFuncti
   }
 };
 
-// Get user's trips
-export const getUserTrips = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const getUserTrips = async ( req: AuthRequest,res: Response,next: NextFunction): Promise<void> => {
   try {
     if (!req.user) {
       throw new AppError('You must be logged in to view trips', 401);
@@ -237,7 +224,7 @@ export const getUserTrips = async (
   }
 };
 
-// Get all trips for the current user
+
 export const getMyTrips = async (req: Request,res: Response,next: NextFunction): Promise<void> => {
   try {
     const trips = await Trip.find({ userId: req.user.id });
@@ -254,7 +241,7 @@ export const getMyTrips = async (req: Request,res: Response,next: NextFunction):
   }
 };
 
-// Cancel a trip
+
 export const cancelTrip = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const trip = await Trip.findOneAndUpdate(
@@ -265,7 +252,6 @@ export const cancelTrip = async (req: AuthRequest, res: Response, next: NextFunc
 
     if (!trip) throw new AppError('No trip found with that ID', 404);
 
-    // Send notification
     await NotificationService.notifyTripStatusChange(trip._id, trip.userId as any, 'cancelled');
 
     res.status(200).json({ status: 'success', data: { trip } });
@@ -274,7 +260,7 @@ export const cancelTrip = async (req: AuthRequest, res: Response, next: NextFunc
   }
 };
 
-// Driver accepts a trip
+
 export const acceptTrip = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const trip = await Trip.findByIdAndUpdate(
@@ -285,7 +271,6 @@ export const acceptTrip = async (req: AuthRequest, res: Response, next: NextFunc
 
     if (!trip) throw new AppError('No trip found with that ID', 404);
 
-    // Send notification
     await NotificationService.notifyTripStatusChange(trip._id, trip.userId as any, 'confirmed');
 
     res.status(200).json({ status: 'success', data: { trip } });
@@ -294,7 +279,6 @@ export const acceptTrip = async (req: AuthRequest, res: Response, next: NextFunc
   }
 };
 
-// Driver completes a trip
 export const completeTrip = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const trip = await Trip.findOneAndUpdate(
@@ -305,7 +289,6 @@ export const completeTrip = async (req: AuthRequest, res: Response, next: NextFu
 
     if (!trip) throw new AppError('No trip found with that ID', 404);
 
-    // Send notification
     await NotificationService.notifyTripStatusChange(trip._id, trip.userId as any, 'completed');
 
     res.status(200).json({ status: 'success', data: { trip } });

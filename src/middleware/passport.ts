@@ -31,7 +31,7 @@ passport.use(
   )
 );
 
-// تسلسل المستخدم
+
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
 });

@@ -19,10 +19,9 @@ const router = express.Router();
 
 router.use(protect);
 
-// get My Trip
+
 router.get('/me', getMyTrips);
 
-// ========== إدارة الرحلات ==========
 router.post('/createTrip', restrictTo('user'), validate(createTripSchema), createTrip);
 router.get('/', restrictTo('admin'), getAllTrips);
 router.get('/user', getUserTrips);
@@ -31,7 +30,6 @@ router.route('/:id')
   .patch(validate(updateTripSchema), updateTrip)
   .delete(deleteTrip);
 
-// ========== إجراءات الرحلات ==========
 router.patch('/cancel/:id', restrictTo('user'), cancelTrip);
 router.patch('/:id/accept', restrictTo('driver'), acceptTrip);
 router.patch('/:id/complete', restrictTo('driver'), completeTrip);

@@ -12,9 +12,8 @@ export const createPaymentIntent = async (req: Request, res: Response, next: Nex
       return;
     }
 
-    // 👉 أنشئ PaymentIntent بدلاً من Checkout Session
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(trip.totalCost * 100), // Stripe uses cents
+      amount: Math.round(trip.totalCost * 100), 
       currency: 'usd',
       metadata: {
         tripId: trip._id.toString(),
@@ -22,7 +21,7 @@ export const createPaymentIntent = async (req: Request, res: Response, next: Nex
       },
     });
 
-    // 👉 أرجع client secret علشان تكمل الدفع في التطبيق
+   
     res.status(200).json({
       clientSecret: paymentIntent.client_secret,
     });

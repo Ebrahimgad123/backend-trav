@@ -51,8 +51,6 @@ export class NotificationService {
       { isRead: true }
     );
   }
-
-  // Notification templates
   static async notifyTripStatusChange(tripId: Types.ObjectId, userId: Types.ObjectId, status: string) {
     return await this.createNotification({
       userId,
@@ -84,11 +82,7 @@ export class NotificationService {
 } 
 
 
-// ⑤ React Native – إرسال الـ Token:
-// ts
-// Copy
-// Edit
-// // services/api.js
+
 // import axios from 'axios';
 
 // export const updateFcmToken = async (token) => {
@@ -102,10 +96,6 @@ export class NotificationService {
 
 //   return res.data;
 // };
-// ts
-// Copy
-// Edit
-// // App.js or useEffect hook
 // import messaging from '@react-native-firebase/messaging';
 // import { updateFcmToken } from './services/api';
 
@@ -120,18 +110,11 @@ export class NotificationService {
 //     updateFcmToken(token);
 //   });
 // }, []);
-// ✅ كده كل حاجة مربوطة:
-// المستخدم يرسل التوكن أول ما يفتح التطبيق.
 
-// السيرفر يحتفظ بالتوكن.
 
-// عند أي حدث (رحلة اتلغت، مراجعة جديدة)، السيرفر يرسل إشعار فعلي للموبايل مباشرة.
+// user send token when the app is open
 
-// تحب أساعدك في:
+// server save the token
 
-// إنشاء رسالة اختبارية (test push)?
+// server send notification when the user open the app
 
-// استقبال الإشعار في React Native من onMessage؟
-
-// أو تصميم Notification UI؟
-// قلّي بس ❤️

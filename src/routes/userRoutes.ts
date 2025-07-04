@@ -11,7 +11,7 @@ import {
 
 const router = express.Router();
 router.use(protect);
-// Admin only routes
+
 router.use(restrictTo("admin"));
 router.route("/").get(getAllUsers);
 

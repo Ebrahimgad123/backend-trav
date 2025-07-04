@@ -40,7 +40,6 @@ const tripSchema = new Schema({
     required: [true, 'Trip must have an expected time'],
     validate: {
       validator: function(value: string) {
-        // Format should be like "2h 30m" or "45m" or "3h"
         return /^(\d+h\s*)?(\d+m)?$/.test(value.trim());
       },
       message: 'Expected time format should be like "2h 30m" or "45m" or "3h"'
@@ -58,7 +57,6 @@ const tripSchema = new Schema({
   timestamps: true,
 });
 
-// Validate that selectedPlaces is not empty
 tripSchema.path('selectedPlaces').validate(function(value: mongoose.Types.ObjectId[]) {
   if (!value || value.length === 0) {
     throw new Error('Trip must have at least one place');
@@ -66,7 +64,6 @@ tripSchema.path('selectedPlaces').validate(function(value: mongoose.Types.Object
   return true;
 });
 
-// Validate that driver is assigned when status is confirmed
 tripSchema.pre('save', function(this: ITrip, next: () => void) {
   if (this.status === 'confirmed' && !this.driverId) {
     throw new Error('Trip cannot be confirmed without assigning a driver');
@@ -74,7 +71,6 @@ tripSchema.pre('save', function(this: ITrip, next: () => void) {
   next();
 });
 
-// Populate places and driver when finding trips
 tripSchema.pre(/^find/, function(this: any, next: () => void) {
   this.populate({
     path: 'selectedPlaces',

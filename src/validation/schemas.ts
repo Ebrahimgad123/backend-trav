@@ -9,7 +9,7 @@ const objectId = Joi.string().custom((value: string, helpers) => {
   return value;
 });
 
-// User Validation Schemas
+
 export const createUserSchema = Joi.object({
   name: Joi.string().required().min(2).max(50),
   email: Joi.string().required().email(),
@@ -58,14 +58,13 @@ export const updatePlaceSchema = Joi.object({
   rating: Joi.number().min(0).max(5),
 }).min(1);
 
-// Trip Validation Schemas
 
 export const createTripSchema = Joi.object({
-  userId: objectId.optional(), // يمكن جعله اختياري (سيؤخذ من التوكن)
+  userId: objectId.optional(), 
   selectedPlaces: Joi.array().items(objectId).min(1).required(),
   driverId: objectId,
-  totalCost: Joi.number().greater(0).optional(), // <-- اجعله اختياري
-  expectedTime: Joi.string().pattern(/^(\d+h\s*)?(\d+m)?$/).optional(), // <-- اجعله اختياري
+  totalCost: Joi.number().greater(0).optional(), 
+  expectedTime: Joi.string().pattern(/^(\d+h\s*)?(\d+m)?$/).optional(), 
   status: Joi.string().valid('pending', 'confirmed', 'completed', 'cancelled').default('pending'),
 });
 
@@ -78,7 +77,6 @@ export const updateTripSchema = Joi.object({
   status: Joi.string().valid('pending', 'confirmed', 'completed', 'cancelled'),
 }).min(1);
 
-// Review Validation Schemas
 export const createReviewSchema = Joi.object({
   userId: objectId.required(),
   placeId: objectId.required(),
@@ -91,7 +89,6 @@ export const updateReviewSchema = Joi.object({
   comment: Joi.string().min(10),
 }).min(1);
 
-// Driver Validation Schemas
 export const createDriverSchema = Joi.object({
   name: Joi.string().required().min(2).max(50),
   phone: Joi.string().required().pattern(/^[0-9]{10,}$/),
