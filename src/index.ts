@@ -17,8 +17,9 @@ import paymentRoutes from './routes/payment';
 import googleAuthRoutes from './routes/googleAuthRoutes';
 import session from 'express-session';
 import passport from './middleware/passport';
-
-
+import { connectRedis } from './config/RedisConfig';
+// ...existing code...
+connectRedis();
 // Create Express app
 const app = express();
 app.use(session({
